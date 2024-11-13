@@ -53,7 +53,7 @@ jobs:
             # 기존 Java 프로세스 종료
             if pgrep -f 'java -jar' > /dev/null; then
               echo "Java process found. Terminating..."
-              pkill -f 'java -jar'
+              pkill -f 'java -jar' || true
               sleep 5
               if pgrep -f 'java -jar' > /dev/null; then
                 echo "Java process still running. Force terminating..."
