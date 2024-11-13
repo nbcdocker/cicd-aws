@@ -49,7 +49,22 @@ jobs:
           port: 22
           script_stop: false
           script: |
-            sudo yum update && sudo yum install -y java-21-amazon-corretto
-            pgrep -f java > /dev/null && echo "Java process found. Terminating..." && (pkill -f java || true) && echo "Java process terminated." || echo "No Java process found. Exiting."
-            nohup java -jar *.jar 1> /dev/null 2>&1 & disown
-            sleep 5
+            sudo yum update -y && sudo yum install -y java-21-amazon-corretto
+            # Java 프로세스 종료
+            if pgrep -f 'java -jar' > /dev/null; then
+              echo "Java process found. Terminating..."
+              pkill -f 'java -jar'
+              sleep 5
+              if pgrep -f 'java -jar' > /dev/null; then
+                echo "Java process still running. Force terminating..."
+                pkill -9 -f 'java -jar'
+              fi
+              echo "Java process terminated."
+            else
+              echo "No Java process found. Exiting."
+            fi
+
+            # 새로운 Java 프로세스 시작
+            echo "Starting new Java process..."
+            nohup java -jar *.jar > app.log 2>&1 & disown
+            echo "Java process started."
