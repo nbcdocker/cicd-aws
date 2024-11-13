@@ -51,5 +51,5 @@ jobs:
           script: |
             sudo yum update && sudo yum install -y java-21-amazon-corretto
             pgrep -f java > /dev/null && echo "Java process found. Terminating..." && (pkill -f java || true) && echo "Java process terminated." || echo "No Java process found. Exiting."
-            nohup java -jar *.jar 1> /dev/null 2>&1 &
+            nohup java -jar *.jar 1> /dev/null 2>&1 & disown
             sleep 5
