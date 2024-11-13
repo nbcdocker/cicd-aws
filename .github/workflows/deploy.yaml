@@ -50,19 +50,5 @@ jobs:
           script_stop: false
           script: |
             sudo yum update -y && sudo yum install -y java-21-amazon-corretto
-            if pgrep -f 'java -jar' > /dev/null; then
-              echo "Java process found. Terminating..."
-              pkill -9 -f 'java -jar' || true
-              sleep 5
-              if pgrep -f 'java -jar' > /dev/null; then
-                echo "Java process still running. Force terminating..."
-                pkill -9 -f 'java -jar' || true
-              fi
-              echo "Java process terminated."
-            else
-              echo "No Java process found. Exiting."
-            fi
-
-            echo "Starting new Java process with 'at' to detach from SSH session..."
+            pkill -f java || true
             echo "nohup java -jar ~/myapp.jar > ~/app.log 2>&1 &" | at now
-            echo "Java process scheduled to start in detached mode."
