@@ -49,5 +49,6 @@ jobs:
           port: 22
           script_stop: true
           script: |
-            kill -9 $(ps -ef | grep java | head -n 1 | awk '{print $2}') 2>/dev/null || true
+            sudo yum update && sudo yum install -y java-21-amazon-corretto
+            kill -9 $(ps -ef | grep java | awk 'NR==1 {print $2}') 2>/dev/null || true
             nohup java -jar *.jar 1> /dev/null 2>&1 &
