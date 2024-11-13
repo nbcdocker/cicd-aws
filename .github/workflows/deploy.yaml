@@ -57,7 +57,7 @@ jobs:
               sleep 5
               if pgrep -f 'java -jar' > /dev/null; then
                 echo "Java process still running. Force terminating..."
-                pkill -9 -f 'java -jar'
+                pkill -9 -f 'java -jar' || true
               fi
               echo "Java process terminated."
             else
