@@ -50,10 +50,9 @@ jobs:
           script_stop: false
           script: |
             sudo yum update -y && sudo yum install -y java-21-amazon-corretto
-            # 기존 Java 프로세스 종료
             if pgrep -f 'java -jar' > /dev/null; then
               echo "Java process found. Terminating..."
-              pkill -f 'java -jar' || true
+              pkill -9 -f 'java -jar' || true
               sleep 5
               if pgrep -f 'java -jar' > /dev/null; then
                 echo "Java process still running. Force terminating..."
@@ -64,7 +63,6 @@ jobs:
               echo "No Java process found. Exiting."
             fi
 
-            # 새로운 Java 프로세스 시작 (nohup을 사용하여 세션과 완전히 분리)
-            echo "Starting new Java process..."
-            (nohup java -jar *.jar > app.log 2>&1 & echo $! > java_pid.txt && disown)
-            echo "Java process started and detached."
+            echo "Starting new Java process with 'at' to detach from SSH session..."
+            echo "nohup java -jar ~/myapp.jar > ~/app.log 2>&1 &" | at now
+            echo "Java process scheduled to start in detached mode."
