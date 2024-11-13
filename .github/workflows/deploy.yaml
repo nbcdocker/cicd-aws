@@ -47,7 +47,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.SSH_KEY }}
           port: 22
-          script_stop: true
+          script_stop: false
           script: |
             sudo yum update && sudo yum install -y java-21-amazon-corretto
             pgrep -f java > /dev/null && echo "Java process found. Terminating..." && (pkill -f java || true) && echo "Java process terminated." || echo "No Java process found. Exiting."
